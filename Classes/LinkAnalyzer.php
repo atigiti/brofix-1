@@ -432,6 +432,9 @@ class LinkAnalyzer implements LoggerAwareInterface
         $this->statistics->initialize();
         $this->statistics->setCountPages((int)count($this->pids));
 
+
+
+
         // Traverse all configured tables
         foreach ($this->searchFields as $table => $fields) {
             // If table is not configured, assume the extension is not installed
@@ -453,6 +456,10 @@ class LinkAnalyzer implements LoggerAwareInterface
                 }
 
                 $selectFields = $this->getSelectFields($table, $fields);
+
+         /*       debug('##################################');
+                debug($selectFields);
+                debug('##################################');*/
 
                 // move db query to ContentRepository, unify handling of selectFields in getSelectFields as 'AS' below
                 if ($table === 'pages') {
@@ -491,6 +498,14 @@ class LinkAnalyzer implements LoggerAwareInterface
                     $tmpFields[] = 'p.l18n_cfg';
                     $selectFields = $tmpFields;
                 }
+
+                // Check if the link is on Workspace
+            /*    if($this->configuration->getDoNotCheckLinksOnWorkspace() === true){
+                    $constraints[] = $queryBuilder->expr()->eq(
+                        $table.'.t3ver_wsid',
+                        0
+                    );
+                }*/
 
                 $queryBuilder->select(...$selectFields)
                     ->from($table)
@@ -816,6 +831,14 @@ class LinkAnalyzer implements LoggerAwareInterface
         ) {
             return false;
         }
+
+        // Check if the element is on WS
+        if($this->configuration->getDoNotCheckLinksOnWorkspace() == true){
+            if($this->contentRepository->isElementOnWorkspace($uid) != 0){
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -833,6 +856,7 @@ class LinkAnalyzer implements LoggerAwareInterface
      */
     public function isRecordShouldBeChecked(string $tablename, array $row): bool
     {
+
         if ($this->isVisibleFrontendRecord($tablename, $row) === false) {
             return false;
         }

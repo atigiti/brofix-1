@@ -228,6 +228,22 @@ class Configuration
     /**
      * @return bool
      */
+    public function getDoNotCheckLinksOnWorkspace(): bool
+    {
+        return (bool)($this->tsConfig['check.']['doNotCheckLinksOnWorkspace'] ?? false);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDoNotCheckAncreLinks(): bool
+    {
+        return (bool)($this->tsConfig['check.']['doNotCheckAncreLinks'] ?? true);
+    }
+
+    /**
+     * @return bool
+     */
     public function isCheckHidden(): bool
     {
         return (bool)($this->tsConfig['checkhidden'] ?? false);

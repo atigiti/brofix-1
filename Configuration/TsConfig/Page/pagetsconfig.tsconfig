@@ -1,7 +1,7 @@
 mod.brofix {
 	searchFields {
 		pages = media,url
-		tt_content = bodytext,header_link,records
+		tt_content = bodytext,header_link,records,t3ver_wsid
 	}
 	# do not check these ctypes in tt_content elements (comma separated)
 	excludeCtype = html
@@ -12,6 +12,8 @@ mod.brofix {
 	  doNotCheckContentOnPagesDoktypes = 3,4
 	  doNotCheckPagesDoktypes = 6,7,199,255
 	  doNotTraversePagesDoktypes = 6,199,255
+    doNotCheckLinksOnWorkspace = 1
+    doNotCheckAncreLinks = 1
 	}
 
 	checkhidden = 0

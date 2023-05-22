@@ -59,6 +59,36 @@ class ContentRepository
     }
 
     /**
+     * Check if the element is a copy on WS
+     * @param int $uid
+     * @return bool
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
+    public function isElementOnWorkspace(int $uid){
+        /**
+         * @var DeletedRestriction
+         */
+        $deletedRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+        $queryBuilder = $this->generateQueryBuilder();
+        $queryBuilder->getRestrictions()
+            ->removeAll()
+            ->add($deletedRestriction);
+        return $queryBuilder
+            ->select('t3ver_wsid')
+            ->from(self::TABLE)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                )
+            )
+            ->executeQuery()
+            ->fetchOne();
+    }
+
+
+    /**
      * !!! Should already be checked if gridelemens is installed!
      *
      * @param int $uid
